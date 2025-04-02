@@ -418,7 +418,7 @@ require('lazy').setup({
 
       -- Ensure the servers are installed
       local ensure_installed = vim.tbl_keys(servers or {})
-      vim.list_extend(ensure_installed, { 'stylua' })
+      vim.list_extend(ensure_installed, { 'stylua', 'prettierd', 'prettier', 'black', 'isort' })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       -- Mason LSP Config
@@ -436,7 +436,7 @@ require('lazy').setup({
     end,
   },
 
-  { -- Autoformat
+  {
     'stevearc/conform.nvim',
     event = { 'BufWritePre' },
     cmd = { 'ConformInfo' },
@@ -452,27 +452,19 @@ require('lazy').setup({
     },
     opts = {
       notify_on_error = false,
-      format_on_save = function(bufnr)
-        -- Disable "format_on_save lsp_fallback" for languages that don't
-        -- have a well standardized coding style. You can add additional
-        -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
-        if disable_filetypes[vim.bo[bufnr].filetype] then
-          return nil
-        else
-          return {
-            timeout_ms = 500,
-            lsp_format = 'fallback',
-          }
-        end
-      end,
+      format_on_save = {
+        -- Ensures it stops after the first available formatter
+        timeout_ms = 500,
+        lsp_fallback = true,
+        stop_after_first = true,
+      },
       formatters_by_ft = {
         lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        javascript = { 'prettierd', 'prettier' },
+        typescript = { 'prettierd', 'prettier' },
+        json = { 'prettierd' },
+        yaml = { 'prettierd' },
+        markdown = { 'prettierd' },
       },
     },
   },
