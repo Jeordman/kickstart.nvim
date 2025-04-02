@@ -20,6 +20,24 @@ return {
       desc = 'Git diffget to resolve conflicts',
       silent = true,
     },
+    {
+      '<leader>gp',
+      ':Git push<cr>',
+      desc = 'Git push',
+      silent = true,
+    },
+    {
+      '<leader>gpu',
+      ':Git push -u origin HEAD<cr>',
+      desc = 'Git push origin head',
+      silent = true,
+    },
+    {
+      '<leader>gpp',
+      ':Git pull',
+      desc = 'Git pull',
+      silent = true,
+    },
   },
   config = function()
     -- Custom configurations for vim-fugitive can go here
