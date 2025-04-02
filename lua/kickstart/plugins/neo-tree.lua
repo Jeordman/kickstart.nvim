@@ -1,25 +1,40 @@
--- Neo-tree is a Neovim plugin to browse the file system
--- https://github.com/nvim-neo-tree/neo-tree.nvim
-
 return {
   'nvim-neo-tree/neo-tree.nvim',
   version = '*',
   dependencies = {
-    'nvim-lua/plenary.nvim',
-    'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
-    'MunifTanjim/nui.nvim',
+    'nvim-lua/plenary.nvim', -- Ensure plenary is available
+    'nvim-tree/nvim-web-devicons', -- Optional, for icons
+    'MunifTanjim/nui.nvim', -- Required by neo-tree
   },
-  cmd = 'Neotree',
+  cmd = 'Neotree', -- Lazy-load on `:Neotree` command
   keys = {
-    { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
+    {
+      '<leader>b',
+      function()
+        require('neo-tree.command').execute { toggle = true, reveal = true, position = 'right' }
+      end,
+      desc = 'Toggle NeoTree and reveal current file',
+    },
   },
   opts = {
     filesystem = {
       window = {
-        mappings = {
-          ['\\'] = 'close_window',
-        },
+        position = 'right', -- Position NeoTree on the right side
       },
     },
   },
+  config = function()
+    -- Ensure NeoTree is opened automatically and on the right side when starting Neovim
+    vim.api.nvim_create_autocmd('VimEnter', {
+      callback = function()
+        if vim.fn.argc() == 0 then
+          -- Open NeoTree and reveal the current working directory
+          require('neo-tree.command').execute { toggle = true, dir = vim.loop.cwd(), position = 'right' }
+        else
+          -- Ensure NeoTree is open with the file on the right when a file is specified
+          require('neo-tree.command').execute { toggle = true, position = 'right' }
+        end
+      end,
+    })
+  end,
 }
