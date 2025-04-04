@@ -34,7 +34,9 @@ return {
     },
     {
       '<leader>gpp',
-      ':Git pull --rebase<cr>',
+      function()
+        vim.cmd.Git({ 'pull', '--rebase' })
+      end,
       desc = 'Git pull',
       silent = true,
     },
