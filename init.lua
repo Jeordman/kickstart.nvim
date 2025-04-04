@@ -32,6 +32,9 @@ vim.g.maplocalleader = ' '
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
+-- colorcolumn is a vertical line at the specified column number
+vim.opt.colorcolumn = '80'
+
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
@@ -445,20 +448,26 @@ require('lazy').setup({
       {
         '<leader>f',
         function()
-          require('conform').format { async = true, lsp_format = 'fallback' }
+          require('conform').format {
+            async = true,
+            lsp_fallback = 'always',
+            range = vim.fn.mode() == 'v' and {
+              start = vim.api.nvim_buf_get_mark(0, '<'),
+              ['end'] = vim.api.nvim_buf_get_mark(0, '>'),
+            } or nil,
+          }
         end,
-        mode = '',
-        desc = '[F]ormat buffer',
+        mode = { 'n', 'v' },
+        desc = '[F]ormat buffer or selection',
       },
     },
     opts = {
       notify_on_error = false,
-      format_on_save = {
-        -- Ensures it stops after the first available formatter
-        timeout_ms = 500,
-        lsp_fallback = true,
-        stop_after_first = true,
-      },
+      -- format_on_save = {
+      --   timeout_ms = 500,
+      --   lsp_fallback = true,
+      --   stop_after_first = true,
+      -- },
       formatters_by_ft = {
         lua = { 'stylua' },
         javascript = { 'prettierd', 'prettier' },
