@@ -32,6 +32,9 @@ vim.g.maplocalleader = ' '
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
+-- turn off line wrapping
+vim.opt.wrap = false
+
 -- colorcolumn is a vertical line at the specified column number
 vim.opt.colorcolumn = '80'
 
@@ -171,12 +174,14 @@ require('lazy').setup({
       }
 
       -- Key mappings for navigating between changes
-      vim.api.nvim_set_keymap('n', ']c', ':lua require"gitsigns".next_hunk()<CR>', { noremap = true, silent = true, desc = 'Next change' })
-      vim.api.nvim_set_keymap('n', '[c', ':lua require"gitsigns".prev_hunk()<CR>', { noremap = true, silent = true, desc = 'Previous change' })
+      vim.api.nvim_set_keymap('n', ']c', ':lua require"gitsigns".next_hunk()<CR>',
+        { noremap = true, silent = true, desc = 'Next change' })
+      vim.api.nvim_set_keymap('n', '[c', ':lua require"gitsigns".prev_hunk()<CR>',
+        { noremap = true, silent = true, desc = 'Previous change' })
     end,
   },
 
-  { -- Useful plugin to show you pending keybinds.
+  {-- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     opts = {
@@ -222,7 +227,7 @@ require('lazy').setup({
 
       -- Document existing key chains
       spec = {
-        { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
+        { '<leader>c', group = '[C]ode',     mode = { 'n', 'x' } },
         { '<leader>d', group = '[D]ocument' },
         { '<leader>r', group = '[R]ename' },
         { '<leader>s', group = '[S]earch' },
@@ -255,7 +260,7 @@ require('lazy').setup({
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
     },
     config = function()
       -- Two important keymaps to use while in Telescope are:
@@ -336,7 +341,7 @@ require('lazy').setup({
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',       opts = {} },
 
       -- Allows extra capabilities provided by nvim-cmp
       'hrsh7th/cmp-nvim-lsp',
@@ -598,6 +603,10 @@ require('lazy').setup({
   },
 
   {
+    'rose-pine/neovim',
+  },
+
+  {
     'rebelot/kanagawa.nvim',
     priority = 1000, -- Make sure to load this before all the other start plugins.
     config = function()
@@ -682,6 +691,31 @@ require('lazy').setup({
 
   {
     'mg979/vim-visual-multi',
+  },
+
+  {
+    'folke/zen-mode.nvim',
+    config = function()
+      vim.keymap.set('n', '<leader>zz', function()
+        require('zen-mode').setup {
+          window = {
+            width = 95,
+            options = {},
+          },
+        }
+        require('zen-mode').toggle()
+
+        if vim.g.colors_name == 'kanagawa' then
+          vim.wo.number = true
+          vim.wo.rnu = true
+          vim.cmd.colorscheme 'rose-pine'
+        else
+          vim.opt.number = true
+          vim.wo.rnu = false
+          vim.cmd.colorscheme 'kanagawa'
+        end
+      end)
+    end,
   },
 
   -- require 'kickstart.plugins.debug',

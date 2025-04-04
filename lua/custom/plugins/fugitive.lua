@@ -34,7 +34,7 @@ return {
     },
     {
       '<leader>gpp',
-      ':Git pull',
+      ':Git pull --rebase<cr>',
       desc = 'Git pull',
       silent = true,
     },
