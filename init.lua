@@ -181,7 +181,7 @@ require('lazy').setup({
     end,
   },
 
-  {-- Useful plugin to show you pending keybinds.
+  {                     -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     opts = {
@@ -718,15 +718,14 @@ require('lazy').setup({
     end,
   },
 
-  -- require 'kickstart.plugins.debug',
-  require 'kickstart.plugins.indent_line',
-  -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
-  require 'kickstart.plugins.neo-tree',
-  require 'custom.plugins.fugitive',
-  require 'custom.plugins.harpoon',
-  require 'custom.plugins.copilot',
-  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  -- require 'plugins.debug',
+  require 'plugins.indent_line',
+  -- require 'plugins.lint',
+  -- require 'plugins.autopairs',
+  require 'plugins.neo-tree',
+  require 'plugins.fugitive',
+  require 'plugins.harpoon',
+  require 'plugins.copilot',
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
