@@ -29,6 +29,7 @@ require('lazy').setup({
   require 'plugins.lib.harpoon',
   require 'plugins.lib.copilot',
   require 'plugins.misc.line-numbers',
+  require 'plugins.misc.smear-cursor',
 
 }, {
   ui = {
