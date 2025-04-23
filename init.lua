@@ -28,6 +28,7 @@ require('lazy').setup({
   require 'plugins.git.fugitive',
   require 'plugins.lib.harpoon',
   require 'plugins.lib.copilot',
+  require 'plugins.misc.line-numbers',
 
 }, {
   ui = {
