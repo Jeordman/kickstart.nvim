@@ -20,6 +20,13 @@ return { -- Fuzzy Finder (files, lsp, etc)
 
     -- Useful for getting pretty icons, but requires a Nerd Font.
     { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
+    {
+      'isak102/telescope-git-file-history.nvim',
+      dependencies = {
+        'nvim-lua/plenary.nvim',
+        'tpope/vim-fugitive',
+      },
+    },
   },
   config = function()
     -- Two important keymaps to use while in Telescope are:
@@ -41,6 +48,7 @@ return { -- Fuzzy Finder (files, lsp, etc)
     -- Enable Telescope extensions if they are installed
     pcall(require('telescope').load_extension, 'fzf')
     pcall(require('telescope').load_extension, 'ui-select')
+    pcall(require('telescope').load_extension, 'git_file_history')
 
     -- See `:help telescope.builtin`
     local builtin = require 'telescope.builtin'
@@ -51,6 +59,7 @@ return { -- Fuzzy Finder (files, lsp, etc)
     vim.keymap.set('n', '<C-c>', ':Telescope git_commits<cr>', { noremap = true, silent = true })
     vim.keymap.set('n', '<C-b>', ':Telescope git_branches<cr>', { noremap = true, silent = true })
     vim.keymap.set('n', 'gD', '<cmd>Telescope lsp_references<CR>', { noremap = true, silent = true })
+    vim.keymap.set('n', 'gh', '<cmd>:Telescope git_file_history<cr>', { noremap = true, silent = true })
 
     -- Slightly advanced example of overriding default behavior and theme
     vim.keymap.set('n', '<leader>/', function()
