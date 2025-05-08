@@ -8,6 +8,7 @@ require 'settings'
 --  To update plugins you can run
 --    :Lazy update
 require('lazy').setup({
+  require 'plugins.neo-tree',
   require 'plugins.vim-sleuth',
   require 'plugins.git.gitsigns',
   require 'plugins.misc.which-key',
@@ -24,7 +25,6 @@ require('lazy').setup({
   require 'plugins.lib.vim-visual-multi',
   require 'plugins.misc.zen-mode',
   require 'plugins.misc.indent-line',
-  require 'plugins.neo-tree',
   require 'plugins.git.fugitive',
   require 'plugins.lib.harpoon',
   require 'plugins.lib.copilot',

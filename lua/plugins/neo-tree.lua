@@ -10,34 +10,16 @@ return {
   keys = {
     {
       '<leader>b',
-      function()
-        require('neo-tree.command').execute { toggle = true, reveal = true, position = 'right' }
-      end,
-      desc = 'Toggle NeoTree and reveal current file',
+      ':Neotree action=focus position=right<CR>',
+      desc = 'Open NeoTree and reveal current file',
     },
   },
-  opts = {
-    filesystem = {
-      window = {
-        position = 'right', -- Position NeoTree on the right side
-        mappings = {
-          ['/'] = 'noop',
+lazy = false,
+ config = function()
+require("neo-tree").setup({
+        window = {
+          position = "right",
         },
-      },
-    },
-  },
-  config = function()
-    -- Ensure NeoTree is opened automatically and on the right side when starting Neovim
-    vim.api.nvim_create_autocmd('VimEnter', {
-      callback = function()
-        if vim.fn.argc() == 0 then
-          -- Open NeoTree and reveal the current working directory
-          require('neo-tree.command').execute { toggle = true, dir = vim.loop.cwd(), position = 'right' }
-        else
-          -- Ensure NeoTree is open with the file on the right when a file is specified
-          require('neo-tree.command').execute { toggle = true, position = 'right' }
-        end
-      end,
-    })
-  end,
+      })
+ end,
 }
