@@ -14,12 +14,11 @@ return {
       desc = 'Open NeoTree and reveal current file',
     },
   },
-lazy = false,
- config = function()
-require("neo-tree").setup({
-        window = {
-          position = "right",
-        },
-      })
- end,
+  config = function()
+    require('neo-tree').setup {
+      window = {
+        position = 'right',
+      },
+    }
+  end,
 }
