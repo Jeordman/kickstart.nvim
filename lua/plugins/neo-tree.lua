@@ -10,7 +10,7 @@ return {
   keys = {
     {
       '<leader>b',
-      ':Neotree action=focus position=right<CR>',
+      ':Neotree action=focus position=right reveal=true<CR>',
       desc = 'Open NeoTree and reveal current file',
     },
   },

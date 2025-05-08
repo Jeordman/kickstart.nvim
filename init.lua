@@ -1,3 +1,5 @@
+-- NOTE: REMERGED WITH KICKSTART.nvim May 8, 2025 --
+
 require 'settings'
 
 -- [[ Configure and install plugins ]]
@@ -16,7 +18,7 @@ require('lazy').setup({
   require 'plugins.lazydev',
   require 'plugins.lspconfig',
   require 'plugins.conform',
-  require 'plugins.nvim-cmp',
+  require 'plugins.blink',
   require 'plugins.colorschemes.rose-pine',
   require 'plugins.colorschemes.kanagawa',
   require 'plugins.misc.todo-comments',
