@@ -34,7 +34,7 @@ require('lazy').setup({
   require 'plugins.lib.supermaven',
   require 'plugins.lib.undotree',
   require 'plugins.misc.line-numbers',
-  require 'plugins.misc.smear-cursor',
+  -- require 'plugins.misc.smear-cursor',
   require 'plugins.misc.floaterm',
 }, {
   ui = {
