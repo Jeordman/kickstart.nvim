@@ -96,6 +96,19 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+vim.api.nvim_create_user_command('ChangeRoot', function()
+  -- Get the full path of the current file's directory
+  local current_file_dir = vim.fn.fnamemodify(vim.fn.expand '%:p', ':h')
+
+  -- Change Neovim's current working directory
+  vim.cmd('cd ' .. current_file_dir)
+
+  print('Changed CWD to: ' .. current_file_dir)
+end, { desc = 'Change CWD to current file directory' })
+
+-- Keymap for the new command
+vim.keymap.set('n', '<leader>cd', ':ChangeRoot<CR>', { desc = 'Change [C]WD to Git [D]irectory root' })
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
