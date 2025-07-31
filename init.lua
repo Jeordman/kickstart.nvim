@@ -36,6 +36,7 @@ require('lazy').setup({
   require 'plugins.misc.line-numbers',
   -- require 'plugins.misc.smear-cursor',
   require 'plugins.misc.floaterm',
+  require 'plugins.misc.neoscroll',
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
