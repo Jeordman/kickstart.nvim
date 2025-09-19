@@ -33,6 +33,7 @@ require('lazy').setup({
   -- require 'plugins.lib.copilot',
   require 'plugins.lib.supermaven',
   require 'plugins.lib.undotree',
+  require 'plugins.lib.marks',
   require 'plugins.misc.line-numbers',
   -- require 'plugins.misc.smear-cursor',
   require 'plugins.misc.floaterm',
