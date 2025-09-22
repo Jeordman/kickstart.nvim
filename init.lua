@@ -26,7 +26,7 @@ require('lazy').setup({
   require 'plugins.nvim-treesitter',
   require 'plugins.neo-tree',
   require 'plugins.lib.vim-visual-multi',
-  require 'plugins.misc.zen-mode',
+  -- require 'plugins.misc.zen-mode',
   require 'plugins.misc.indent-line',
   require 'plugins.git.fugitive',
   require 'plugins.lib.harpoon',
