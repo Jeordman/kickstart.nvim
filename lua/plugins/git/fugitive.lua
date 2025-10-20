@@ -35,9 +35,16 @@ return {
     {
       '<leader>gpp',
       function()
-        vim.cmd.Git({ 'pull', '--rebase' })
+        vim.cmd.Git { 'pull', '--rebase' }
       end,
       desc = 'Git pull',
+      silent = true,
+    },
+    {
+      '<leader>gc',
+      ':<C-u>lua local s,e = vim.fn.line("\'<"), vim.fn.line("\'>"); local f = vim.fn.expand("%:."); local ref = (s == e) and (f .. ":" .. s) or (f .. ":" .. s .. "-" .. e); vim.fn.setreg("+", ref); print("Copied: " .. ref)<CR>',
+      desc = 'Copy file:lines reference',
+      mode = 'v', -- Visual mode only
       silent = true,
     },
   },
