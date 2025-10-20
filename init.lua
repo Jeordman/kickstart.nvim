@@ -26,7 +26,6 @@ require('lazy').setup({
   require 'plugins.nvim-treesitter',
   require 'plugins.neo-tree',
   require 'plugins.lib.vim-visual-multi',
-  -- require 'plugins.misc.zen-mode',
   require 'plugins.misc.indent-line',
   require 'plugins.git.fugitive',
   require 'plugins.lib.harpoon',
@@ -35,10 +34,8 @@ require('lazy').setup({
   require 'plugins.lib.undotree',
   require 'plugins.lib.marks',
   require 'plugins.misc.line-numbers',
-  -- require 'plugins.misc.smear-cursor',
-  require 'plugins.misc.floaterm',
+  require 'plugins.misc.lazygit',
   require 'plugins.misc.neoscroll',
-  -- require 'plugins.misc.precognition',
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
