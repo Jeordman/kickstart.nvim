@@ -211,7 +211,7 @@ return {
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        -- pyright = {},
+        pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -219,8 +219,29 @@ return {
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
-        -- ts_ls = {},
+        ts_ls = {
+          -- Only try to load Next.js plugin if it exists
+          init_options = {
+            plugins = vim.fn.filereadable(vim.fn.getcwd() .. '/node_modules/@next/typescript-plugin/package.json') == 1 and
+            {
+              {
+                name = '@next/typescript-plugin',
+                location = vim.fn.getcwd() .. '/node_modules/@next/typescript-plugin',
+              },
+            } or {},
+          },
+        },
         --
+        jsonls = {},
+        cssls = {},
+        html = {},
+        tailwindcss = {},
+        intelephense = {},
+        eslint = {
+          settings = {
+            workingDirectories = { mode = 'auto' },
+          },
+        },
 
         lua_ls = {
           -- cmd = { ... },
