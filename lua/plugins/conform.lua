@@ -28,17 +28,40 @@ return { -- code formatter
     -- },
     formatters_by_ft = {
       lua = { 'stylua' },
-      javascript = { 'prettierd', 'eslint_d' },
-      typescript = { 'prettierd', 'eslint_d' },
-      javascriptreact = { 'prettierd', 'eslint_d' },
-      typescriptreact = { 'prettierd', 'eslint_d' },
-      json = { 'prettierd' },
-      yaml = { 'prettierd' },
-      markdown = { 'prettierd' },
-      css = { 'prettierd', 'stylelint' },
-      scss = { 'prettierd', 'stylelint' },
-      less = { 'prettierd', 'stylelint' },
-      html = { 'prettierd', 'htmlbeautifier' },
+      -- Use actual commands, not daemons, for consistency
+      javascript = { 'eslint', 'prettier' },
+      typescript = { 'eslint', 'prettier' },
+      javascriptreact = { 'eslint', 'prettier' },
+      typescriptreact = { 'eslint', 'prettier' },
+      json = { 'prettier' },
+      yaml = { 'prettier' },
+      markdown = { 'prettier' },
+      css = { 'prettier', 'stylelint' },
+      scss = { 'prettier', 'stylelint' },
+      less = { 'prettier', 'stylelint' },
+      html = { 'prettier' },
+    },
+    formatters = {
+      -- Configure ESLint to use --fix like your npm script
+      eslint = {
+        command = './node_modules/.bin/eslint',
+        args = {
+          '--fix',
+          '--cache',
+          '--format=json',
+          '--stdin',
+          '--stdin-filename',
+          '$FILENAME',
+        },
+        stdin = true,
+      },
+      -- Configure Prettier to use project config
+      prettier = {
+        command = './node_modules/.bin/prettier',
+        args = { '--write', '$FILENAME' },
+        stdin = false,
+        -- This ensures it uses your .prettierrc.cjs and plugins
+      },
     },
   },
 }
