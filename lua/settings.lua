@@ -121,3 +121,37 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
   end
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
+
+-- -- Set autoread option
+-- vim.o.autoread = true
+--
+-- -- Autocmds to check for changes when Neovim gains focus, enters a buffer, or is idle
+-- vim.api.nvim_create_augroup('CheckForChanges', { clear = true })
+-- vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold', 'CursorHoldI' }, {
+--   group = 'CheckForChanges',
+--   callback = function()
+--     if vim.fn.mode() ~= 'c' then -- Avoid running in command mode
+--       vim.cmd 'checktime'
+--     end
+--   end,
+-- })
+
+-- -- Optional: Add a notification after a file has been reloaded from disk
+-- vim.api.nvim_create_autocmd({ 'FileChangedShellPost' }, {
+--   group = 'CheckForChanges',
+--   callback = function()
+--     vim.notify('File changed on disk. Buffer reloaded.', vim.log.levels.INFO, {})
+--   end,
+-- })
+
+-- overrite the :e to refresh all buffers
+vim.api.nvim_create_autocmd('CmdlineLeave', {
+  pattern = '*',
+  callback = function()
+    if vim.fn.getcmdline():match('^e!?$') then
+      vim.schedule(function()
+        vim.cmd('bufdo e')
+      end)
+    end
+  end
+})

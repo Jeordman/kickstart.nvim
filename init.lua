@@ -10,7 +10,7 @@ require 'settings'
 --  To update plugins you can run
 --    :Lazy update
 require('lazy').setup({
-  require 'plugins.vim-sleuth',
+  require 'plugins.guess-indent',
   require 'plugins.git.gitsigns',
   require 'plugins.misc.which-key',
   require 'plugins.telescope',
