@@ -144,13 +144,15 @@ vim.opt.rtp:prepend(lazypath)
 --   end,
 -- })
 
--- overrite the :e to refresh all buffers
+-- override :e to refresh all buffers, staying on the current buffer
 vim.api.nvim_create_autocmd('CmdlineLeave', {
   pattern = '*',
   callback = function()
     if vim.fn.getcmdline():match('^e!?$') then
       vim.schedule(function()
+        local current_buf = vim.api.nvim_get_current_buf()
         vim.cmd('bufdo e')
+        vim.api.nvim_set_current_buf(current_buf)
       end)
     end
   end
