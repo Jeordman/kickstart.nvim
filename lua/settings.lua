@@ -122,38 +122,75 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
--- -- Set autoread option
--- vim.o.autoread = true
---
--- -- Autocmds to check for changes when Neovim gains focus, enters a buffer, or is idle
--- vim.api.nvim_create_augroup('CheckForChanges', { clear = true })
--- vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold', 'CursorHoldI' }, {
---   group = 'CheckForChanges',
---   callback = function()
---     if vim.fn.mode() ~= 'c' then -- Avoid running in command mode
---       vim.cmd 'checktime'
---     end
---   end,
--- })
+-- [[ Manual buffer refresh for external file changes ]]
+-- When using Claude or other external tools, press :e to refresh all buffers
 
--- -- Optional: Add a notification after a file has been reloaded from disk
--- vim.api.nvim_create_autocmd({ 'FileChangedShellPost' }, {
---   group = 'CheckForChanges',
---   callback = function()
---     vim.notify('File changed on disk. Buffer reloaded.', vim.log.levels.INFO, {})
---   end,
--- })
+-- Function to refresh all buffers from disk
+local function refresh_all_buffers()
+  local current_buf = vim.api.nvim_get_current_buf()
+  local current_win = vim.api.nvim_get_current_win()
+  local cursor_pos = vim.api.nvim_win_get_cursor(current_win)
+  local view = vim.fn.winsaveview()
 
--- override :e to refresh all buffers, staying on the current buffer
-vim.api.nvim_create_autocmd('CmdlineLeave', {
-  pattern = '*',
-  callback = function()
-    if vim.fn.getcmdline():match('^e!?$') then
-      vim.schedule(function()
-        local current_buf = vim.api.nvim_get_current_buf()
-        vim.cmd('bufdo e')
-        vim.api.nvim_set_current_buf(current_buf)
-      end)
+  local reloaded = 0
+  local errors = 0
+
+  -- Go through all loaded buffers
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_loaded(buf) then
+      local bufname = vim.api.nvim_buf_get_name(buf)
+      -- Only reload normal file buffers (not terminals, help, etc.)
+      if bufname ~= '' and vim.bo[buf].buftype == '' then
+        -- Check if file exists
+        if vim.fn.filereadable(bufname) == 1 then
+          -- Force reload from disk, discarding any unsaved changes
+          local ok = pcall(function()
+            vim.api.nvim_buf_call(buf, function()
+              vim.cmd('silent! edit!')
+            end)
+          end)
+          if ok then
+            reloaded = reloaded + 1
+          else
+            errors = errors + 1
+          end
+        end
+      end
     end
   end
-})
+
+  -- Restore position
+  vim.api.nvim_set_current_buf(current_buf)
+  vim.api.nvim_set_current_win(current_win)
+  vim.api.nvim_win_set_cursor(current_win, cursor_pos)
+  vim.fn.winrestview(view)
+
+  -- Report what happened
+  local msg = string.format('Refreshed %d buffer%s', reloaded, reloaded == 1 and '' or 's')
+  if errors > 0 then
+    msg = msg .. string.format(' (%d error%s)', errors, errors == 1 and '' or 's')
+  end
+  print(msg)
+end
+
+-- Override the :e command
+vim.api.nvim_create_user_command('E', function(opts)
+  if opts.args == '' then
+    -- No filename given - refresh all buffers
+    refresh_all_buffers()
+  else
+    -- Filename given - edit that file normally
+    vim.cmd('edit ' .. opts.args)
+  end
+end, { nargs = '?', complete = 'file', desc = 'Edit file or refresh all buffers' })
+
+-- Make :e use our custom command
+vim.cmd([[
+  cnoreabbrev <expr> e getcmdtype() == ':' && getcmdline() ==# 'e' ? 'E' : 'e'
+  cnoreabbrev <expr> e! getcmdtype() == ':' && getcmdline() ==# 'e!' ? 'E' : 'e!'
+  cnoreabbrev <expr> edit getcmdtype() == ':' && getcmdline() ==# 'edit' ? 'E' : 'edit'
+  cnoreabbrev <expr> edit! getcmdtype() == ':' && getcmdline() ==# 'edit!' ? 'E' : 'edit!'
+]])
+
+-- Optional: Add a keymap for quick manual refresh
+vim.keymap.set('n', '<leader>re', refresh_all_buffers, { desc = '[R]efresh [E]verything from disk' })
